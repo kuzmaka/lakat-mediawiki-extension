@@ -1,0 +1,52 @@
+{
+	"name": "Lakat",
+	"author": [
+		"Leonhard Horstmeyer"
+	],
+	"url": "https://www.mediawiki.org/wiki/Extension:Lakat",
+	"descriptionmsg": "lakat-desc",
+	"license-name": "GPL-2.0-or-later",
+	"type": "other",
+	"requires": {
+		"MediaWiki": ">= 1.35.0"
+	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\Lakat\\": "src/"
+	},
+	"config": {
+		"LakatEnableFoo": {
+			"description": "Enable the Foo feature.",
+			"value": true
+		},
+		"LakatVandalizeEachPage": {
+			"description": "Write 'Lakat was here' on each page",
+			"value": false
+		}
+	},
+	"HookHandlers": {
+		"LakatHooks": {
+			"class": "MediaWiki\\Extension\\Lakat\\Hooks"
+		}
+	},
+	"Hooks": {
+		"BeforePageDisplay": "LakatHooks"
+	},
+	"MessagesDirs": {
+		"Lakat": [
+			"i18n"
+		]
+	},
+	"ResourceModules": {
+		"ext.Lakat": {
+			"localBasePath": "resources/ext.Lakat",
+			"remoteExtPath": "Lakat/resources/ext.Lakat",
+			"dependencies": [],
+			"styles": [],
+			"packageFiles": [
+				"init.js"
+			],
+			"messages": []
+		}
+	},
+	"manifest_version": 2
+}
