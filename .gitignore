@@ -1,4 +1,5 @@
 .env
+.pyvenv
 manualTest
 
 Lakat/composer.lock

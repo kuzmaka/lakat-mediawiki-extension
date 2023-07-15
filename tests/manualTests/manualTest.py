@@ -324,6 +324,10 @@ def main(overwrite = True):
     else:
         print("docker-compose is installed.")
     
+    # change to directory two folders up using os.chdir and os.path.join
+    os.chdir(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+
     # check whether the folder "manualTest" exists. If not create it. If yes, delete it and create it again.
     if not os.path.exists("manualTest"):
         os.mkdir("manualTest")
