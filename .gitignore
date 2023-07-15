@@ -1,2 +1,7 @@
 .env
 manualTest
+
+Lakat/composer.lock
+Lakat/vendor
+Lakat/node_modules
+Lakat/.eslintcache
