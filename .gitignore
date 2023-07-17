@@ -6,3 +6,6 @@ Lakat/composer.lock
 Lakat/vendor
 Lakat/node_modules
 Lakat/.eslintcache
+
+createFolderStructure.py
+FolderStructure.md

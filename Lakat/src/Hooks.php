@@ -19,19 +19,29 @@
 
 namespace MediaWiki\Extension\Lakat;
 
-class Hooks implements \MediaWiki\Hook\BeforePageDisplayHook {
+namespace MediaWiki\Extension\Lakat;
 
-	/**
-	 * @see https://www.mediawiki.org/wiki/Manual:Hooks/BeforePageDisplay
-	 * @param \OutputPage $out
-	 * @param \Skin $skin
-	 */
-	public function onBeforePageDisplay( $out, $skin ): void {
+use Skin;
+use OutputPage;
+use SkinTemplate;
+
+class Hooks {
+
+	public static function onBeforePageDisplay( OutputPage $out, Skin $skin ) {
 		$config = $out->getConfig();
 		if ( $config->get( 'LakatVandalizeEachPage' ) ) {
 			$out->addModules( 'oojs-ui-core' );
 			$out->addHTML( \Html::element( 'p', [], 'Lakat was here' ) );
 		}
+	}
+
+	public static function onSkinTemplateNavigationUniversal( array &$links, SkinTemplate $skin ) {
+		$links['actions']['switchbranch'] = [
+			'class' => false,
+			'text' => $skin->msg( 'lakat-switchbranch' )->text(),
+			'href' => 'https://google.com',
+			'title' => $skin->msg( 'lakat-switchbranch-tooltip' )->text(),
+		];
 	}
 
 }
