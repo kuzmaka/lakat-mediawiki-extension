@@ -29,8 +29,7 @@
 		}
 	},
 	"Hooks": {
-		"BeforePageDisplay": "MediaWiki\\Extension\\Lakat\\Hooks::onBeforePageDisplay",
-        "SkinTemplateNavigation::Universal": "MediaWiki\\Extension\\Lakat\\Hooks::onSkinTemplateNavigationUniversal"
+		"BeforePageDisplay": "LakatHooks"
 	},
 	"MessagesDirs": {
 		"Lakat": [

@@ -4,7 +4,5 @@
 			"Leonhard Horstmeyer"
 		]
 	},
-	"lakat-desc": "This is the Lakat extension",
-	"lakat-switchbranch": "Switch Branch",
-	"lakat-switchbranch-tooltip": "Switch to a different branch"
+	"lakat-desc": "This is an example extension"
 }
