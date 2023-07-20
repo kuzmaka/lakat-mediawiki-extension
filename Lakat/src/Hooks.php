@@ -43,6 +43,11 @@ class Hooks implements
 	# use the 'Universal' skin to add a link to the top navigation bar
 	
 	public function onSkinTemplateNavigation__Universal($sktemplate, &$links ): void {
+		
+		global $wgSitename, $wgServer;
+		
+		$currentTitle = $sktemplate->getTitle();
+		
 		$links['actions']['social'] = [
 			'class' => false,
 			'text' => $sktemplate->msg( 'lakat-social' )->text(),
@@ -50,6 +55,15 @@ class Hooks implements
 			'title' => $sktemplate->msg( 'lakat-social-tooltip' )->text(),
 		];
 
+		$links['actions']['social'] = [
+			'class' => false,
+			'text' => $wgSitename,
+			'href' => 'https://google.com',
+			'title' => $sktemplate->msg( 'lakat-social-tooltip' )->text(),
+		];
+
+
+		
 
 		$links['views'] = [
 			'review' => [
@@ -66,11 +80,23 @@ class Hooks implements
 			]
 		];
 
+		$urlParts = parse_url($wgServer);
+		$port = '8280';
+		if (isset($urlParts['port'])) {
+			if ($urlParts['port']=='8280') {
+				$port = '8281';
+			} else {
+				$port = '8280';
+			}
+		}
+
+		$fullUrl = "http://localhost:" . $port . "/index.php/" . $currentTitle->getText();
+
 		$links['namespaces'] = [
 			'switchbranch' => [			
 				'class' => false,
 				'text' => $sktemplate->msg( 'lakat-switchbranch' )->text(),
-				'href' => 'https://google.com',
+				'href' => $fullUrl,
 				'title' => $sktemplate->msg( 'lakat-switchbranch-tooltip' )->text()
 			],
 			'createbranch' => [
