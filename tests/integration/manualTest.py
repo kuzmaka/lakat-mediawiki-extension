@@ -380,6 +380,12 @@ def main(overwrite = True):
     os.chdir("manualTest")
     os.system("docker-compose up --build -d")
 
+    # start the browser brave and open localhost:8280
+    # webport = os.getenv("WEB_PORT", "8280")
+    # os.system("brave-browser")
+
+
+
 
 if __name__ == "__main__":
 
