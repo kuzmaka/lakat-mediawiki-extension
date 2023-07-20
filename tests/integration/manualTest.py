@@ -6,26 +6,31 @@ import shutil
 import dotenv
 
 # if .env exists, load it, otherwise load .example.env
-if os.path.isfile(".env"):
-    dotenv.load_dotenv(".env")
-else:
-    dotenv.load_dotenv(".example.env")
+
+
+
 
 
 # create LocalSettings.php text
 extensionName = "Lakat"
 
 
-def createLocalSettingsText(withExtensions=False):
+def createLocalSettingsText(serviceNumber="1", withExtensions=False):
 
     secretKey = os.getenv("SECRET_KEY")
     upgradeKey = os.getenv("UPGRADE_KEY")
-    web_port = os.getenv("WEB_PORT")
-    dbserver = "database1"
-    dbname = os.getenv("DB_1")
-    dbuser = os.getenv("USER_1")
-    dbpassword = os.getenv("DB_PASSWORD_1")
-    dbport = os.getenv("DB_PORT_1")
+    web_port = os.getenv("WEBPORT_{serviceNumber}".format(serviceNumber=serviceNumber), "8280")
+    dbserver = "database{serviceNumber}".format(serviceNumber=serviceNumber)
+    dbname = os.getenv("DB_{serviceNumber}".format(serviceNumber=serviceNumber))
+    dbuser = os.getenv("USER_{serviceNumber}".format(serviceNumber=serviceNumber))
+    dbpassword = os.getenv("DB_PASSWORD_{serviceNumber}".format(serviceNumber=serviceNumber))
+    dbport = os.getenv("DB_PORT_{serviceNumber}".format(serviceNumber=serviceNumber), "3307")
+
+    # print the service number
+    print(serviceNumber)
+    print("serviceNumber: " + str(serviceNumber))
+    # print all those variables in one statement
+    print("web_port: {web_port}, dbserver: {dbserver}, dbname: {dbname}, dbuser: {dbuser}, dbpassword: {dbpassword}, secretKey: {secretKey}, upgradeKey: {upgradeKey}".format(web_port = web_port, dbserver = dbserver, dbname = dbname, dbuser = dbuser, dbpassword = dbpassword, secretKey = secretKey, upgradeKey = upgradeKey))
 
     if dbserver == None:
         dbserver = "database1"
@@ -35,10 +40,6 @@ def createLocalSettingsText(withExtensions=False):
         dbuser = "wikiuser1"
     if dbpassword == None:
         dbpassword = "password1"
-    if dbport == None:
-        dbport = "3307"
-    if web_port == None:
-        web_port = "8280"
     if secretKey == None:
         secretKey = "41571460fe422309790b2e11989fd54ab1f1d7fd43ae401b34e90912bf3f18c3"
     if upgradeKey == None:
@@ -86,8 +87,8 @@ $wgResourceBasePath = $wgScriptPath;
 ## The URL paths to the logo.  Make sure you change this from the default,
 ## or else you'll overwrite your logo when you upgrade!
 $wgLogos = [
-	'1x' => "$wgResourceBasePath/resources/assets/change-your-logo.svg",
-	'icon' => "$wgResourceBasePath/resources/assets/change-your-logo.svg",
+	'1x' => "$wgResourceBasePath/resources/assets/Lakatdummy.svg",
+	'icon' => "$wgResourceBasePath/resources/assets/Lakatdummy.svg",
 ];
 
 ## UPO means: this is also a user preference option
@@ -199,17 +200,22 @@ $wgLakatVandalizeEachPage = true;
         text += addExtensions
     return text
 
-# docker-compose.yml text
-def createDockerComposeText(withLocalSettings = False, withExtensions = False): 
+def getVolumes(serviceNumber="1", withLocalSettings = False, withExtensions = False):
     volumes = ""
     if withLocalSettings or withExtensions:
         volumes = """\n    volumes:"""
     if withLocalSettings:
         volumes += """
-      - ./LocalSettings.php:/var/www/html/LocalSettings.php"""
+      - ./LocalSettings{serviceNumber}.php:/var/www/html/LocalSettings.php""".format(serviceNumber=serviceNumber)
     if withExtensions:
         volumes += """
-      - ./extensions:/var/www/html/extensions"""    
+      - ./extensions:/var/www/html/extensions"""   
+    
+    return volumes
+
+
+# docker-compose.yml text
+def createDockerComposeText(withLocalSettings = False, withExtensions = False): 
     
     db_1 = os.getenv("DB_1")
     db_2 = os.getenv("DB_2")
@@ -220,7 +226,8 @@ def createDockerComposeText(withLocalSettings = False, withExtensions = False):
     db_port_1 = os.getenv("DB_PORT_1")
     db_port_2 = os.getenv("DB_PORT_2")
     pma_port = os.getenv("PMA_PORT")
-    webport = os.getenv("WEBPORT")
+    webport1 = os.getenv("WEBPORT_1")
+    webport2 = os.getenv("WEBPORT_2")
 
     if db_1 == None:
         db_1 = "wiki1"
@@ -238,25 +245,39 @@ def createDockerComposeText(withLocalSettings = False, withExtensions = False):
         db_port_1 = "3307"
     if db_port_2 == None:
         db_port_2 = "3308"
-    if webport == None:
-        webport = "8280"
+    if webport1 == None:
+        webport1 = "8280"
+    if webport2 == None:
+        webport2 = "8281"
     if pma_port == None:
-        pma_port = "8281"
+        pma_port = "8380"
 
 
 
     text = """
 version: '3.7'
 services:
-  web:
+  web1:
     image: mediawiki:1.39
-    container_name: web
+    container_name: web1
     ports:
-      - {webport}:80
+      - {webport1}:80
     depends_on:
       - database1
+    restart: unless-stopped""".format(webport1=webport1) 
+
+    text += getVolumes("1", withLocalSettings, withExtensions)  
+    
+    text += """
+
+  web2:
+    image: mediawiki:1.39
+    container_name: web2
+    ports:
+      - {webport2}:80
+    depends_on:
       - database2
-    restart: unless-stopped""".format(webport=webport) + volumes + """
+    restart: unless-stopped""".format(webport2=webport2) + getVolumes("2", withLocalSettings, withExtensions)  + """
     
   database1:
     image: mariadb
@@ -276,8 +297,6 @@ services:
   database2:
     image: mariadb
     container_name: db2
-    depends_on:
-      - database1
     environment:
       MYSQL_DATABASE: '{db_2}'
       MYSQL_USER: '{user_2}'
@@ -312,9 +331,9 @@ def createDockerCompose(withLocalSettings = False, withExtensions = False):
         f.write(text)
         
 
-def createLocalSettings(withExtensions = False):
-    text = createLocalSettingsText(withExtensions)
-    with open("LocalSettings.php", "w") as f:
+def createLocalSettings(serviceNumber="1", withExtensions = False):
+    text = createLocalSettingsText(serviceNumber=serviceNumber, withExtensions=withExtensions)
+    with open("LocalSettings{serviceNumber}.php".format(serviceNumber=serviceNumber), "w") as f:
         f.write(text)
 
 
@@ -327,7 +346,18 @@ def main(overwrite = True):
         print("docker-compose is installed.")
     
     # change to directory two folders up using os.chdir and os.path.join
-    os.chdir(os.path.join(os.path.dirname(__file__), "..", ".."))
+    os.chdir(os.path.dirname(__file__))
+
+    if os.path.isfile(".env"):
+        dotenv.load_dotenv(".env")
+
+    else:
+        if os.path.isfile(".example.env"):
+            dotenv.load_dotenv(".example.env")
+        else: 
+            sys.exit("No .env or .example.env file found.")
+    
+    os.chdir(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 
     # check whether the folder "manualTest" exists. If not create it. If yes, delete it and create it again.
@@ -337,12 +367,17 @@ def main(overwrite = True):
     print("manual test folder is created.")
     
     # check whether LocalSettings.php exists
-    if os.path.exists("LocalSettings.php"):
-        print("LocalSettings.php exists.")
-    else:
-        print("LocalSettings.php does not exist.")
-        createLocalSettings(withExtensions=True)
-        print("LocalSettings.php is created.")
+    services = 2
+    for serviceNumber in range(1, services + 1):
+        settingsName = "LocalSettings{serviceNr}.php".format(serviceNr=serviceNumber)
+        if os.path.exists(settingsName):
+            print(settingsName +" exists.")
+        else:
+            print(settingsName + " does not exist.")
+            createLocalSettings(serviceNumber=serviceNumber, withExtensions=True)
+            print(settingsName + " is created.")
+
+    # check whether both Local
     
     # check whether docker-compose.yml exists
     createDockerCompose(withLocalSettings=True, withExtensions=True)
@@ -376,9 +411,18 @@ def main(overwrite = True):
     # copy the file test/dbdumps/wikiNoContentYet.sql to the manualTest folder and name it wiki.sql
     shutil.copyfile(os.path.join("tests", "dbdumps", "wikiNoContentYet.sql"), os.path.join("manualTest", "wiki.sql"))
 
+    # copy the file tests/img/Lakatdummy.svg to the manualTest folder and name it Lakatdummy.svg
+    shutil.copyfile(os.path.join("tests", "img", "Lakatdummy.svg"), os.path.join("manualTest", "Lakatdummy.svg"))
+    print('Logo has been copied to manualTest folder.')
+
     # run docker-compose up
     os.chdir("manualTest")
     os.system("docker-compose up --build -d")
+    print('docker-compose up --build -d is executed.')
+
+    # docker cp the Lakatdummy.svg file to the web1 container
+    os.system("docker cp Lakatdummy.svg web1:/var/www/html/resources/assets/Lakatdummy.svg")
+    os.system("docker cp Lakatdummy.svg web2:/var/www/html/resources/assets/Lakatdummy.svg")
 
     # start the browser brave and open localhost:8280
     # webport = os.getenv("WEB_PORT", "8280")
