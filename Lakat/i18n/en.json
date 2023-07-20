@@ -7,6 +7,16 @@
 	"lakat-desc": "This is the Lakat extension",
 	"lakat-switchbranch": "Switch Branch",
     "lakat-switchbranch-tooltip": "Switch to a different branch",
-	"lakat-views-primary": "Review",
-	"lakat-views-primary-tooltip": "Review this Article"
+	"lakat-review": "Review",
+	"lakat-review-tooltip": "Review the current page",
+	"lakat-diffs": "Diffs",
+	"lakat-diffs-tooltip": "Show the diffs of the current page",
+	"lakat-create-branch": "Create Branch",
+	"lakat-create-branch-tooltip": "Create a new branch",
+	"lakat-branch-config": "Branch Configuration",
+	"lakat-branch-config-tooltip": "Configure the branches",
+	"lakat-token": "Token",
+	"lakat-token-tooltip": "Enter your token",
+	"lakat-social": "Social",
+	"lakat-social-tooltip": "Share the current page"
 }

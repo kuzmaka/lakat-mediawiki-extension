@@ -21,8 +21,6 @@ namespace MediaWiki\Extension\Lakat;
 
 use SkinTemplate;
 
-
-
 class Hooks implements 
 	\MediaWiki\Hook\BeforePageDisplayHook,
 	\MediaWiki\Hook\SkinTemplateNavigation__UniversalHook
@@ -45,19 +43,57 @@ class Hooks implements
 	# use the 'Universal' skin to add a link to the top navigation bar
 	
 	public function onSkinTemplateNavigation__Universal($sktemplate, &$links ): void {
-		$links['actions']['switchbranch'] = [
+		$links['actions']['social'] = [
 			'class' => false,
-			'text' => $sktemplate->msg( 'lakat-switchbranch' )->text(),
+			'text' => $sktemplate->msg( 'lakat-social' )->text(),
 			'href' => 'https://google.com',
-			'title' => $sktemplate->msg( 'lakat-switchbranch-tooltip' )->text(),
+			'title' => $sktemplate->msg( 'lakat-social-tooltip' )->text(),
 		];
 
-		$links['views_primary']['switchbranch'] = [
-			'class' => false,
-			'text' => $sktemplate->msg( 'lakat-views-primary' )->text(),
-			'href' => 'https://google.com',
-			'title' => $sktemplate->msg( 'lakat-views-primary-tooltip' )->text(),
+
+		$links['views'] = [
+			'review' => [
+				'class' => false,
+				'text' => $sktemplate->msg( 'lakat-review' )->text(),
+				'href' => 'https://google.com',
+				'title' => $sktemplate->msg( 'lakat-review-tooltip' )->text(),
+			],
+			'diffs' => [
+				'class' => false,
+				'text' => $sktemplate->msg( 'lakat-diffs' )->text(),
+				'href' => 'https://example.com',
+				'title' => $sktemplate->msg( 'lakat-diffs-tooltip' )->text(),
+			]
 		];
+
+		$links['namespaces'] = [
+			'switchbranch' => [			
+				'class' => false,
+				'text' => $sktemplate->msg( 'lakat-switchbranch' )->text(),
+				'href' => 'https://google.com',
+				'title' => $sktemplate->msg( 'lakat-switchbranch-tooltip' )->text()
+			],
+			'createbranch' => [
+				'class' => false,
+				'text' => $sktemplate->msg( 'lakat-create-branch' )->text(),
+				'href' => 'https://another-example.com',
+				'title' => $sktemplate->msg( 'lakat-create-branch-tooltip' )->text(),
+			],
+			'branchconfig' => [
+				'class' => false,
+				'text' => $sktemplate->msg( 'lakat-branch-config' )->text(),
+				'href' => 'https://another-example.com',
+				'title' => $sktemplate->msg( 'lakat-branch-config-tooltip' )->text(),
+			],
+			'tokens' => [
+				'class' => false,
+				'text' => $sktemplate->msg( 'lakat-token' )->text(),
+				'href' => 'https://another-example.com',
+				'title' => $sktemplate->msg( 'lakat-token-tooltip' )->text(),
+			]
+		];
+
+		
 
 		
 	}
