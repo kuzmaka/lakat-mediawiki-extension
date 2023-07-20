@@ -19,7 +19,14 @@
 
 namespace MediaWiki\Extension\Lakat;
 
-class Hooks implements \MediaWiki\Hook\BeforePageDisplayHook {
+use SkinTemplate;
+
+
+
+class Hooks implements 
+	\MediaWiki\Hook\BeforePageDisplayHook,
+	\MediaWiki\Hook\SkinTemplateNavigation__UniversalHook
+{
 
 	/**
 	 * @see https://www.mediawiki.org/wiki/Manual:Hooks/BeforePageDisplay
@@ -33,5 +40,43 @@ class Hooks implements \MediaWiki\Hook\BeforePageDisplayHook {
 			$out->addHTML( \Html::element( 'p', [], 'Lakat was here' ) );
 		}
 	}
+
+	# https://www.mediawiki.org/wiki/Manual:Hooks/SkinTemplateNavigation
+	# use the 'Universal' skin to add a link to the top navigation bar
+	
+	public function onSkinTemplateNavigation__Universal($sktemplate, &$links ): void {
+		$links['actions']['switchbranch'] = [
+			'class' => false,
+			'text' => $sktemplate->msg( 'lakat-switchbranch' )->text(),
+			'href' => 'https://google.com',
+			'title' => $sktemplate->msg( 'lakat-switchbranch-tooltip' )->text(),
+		];
+
+		$links['views_primary']['switchbranch'] = [
+			'class' => false,
+			'text' => $sktemplate->msg( 'lakat-views-primary' )->text(),
+			'href' => 'https://google.com',
+			'title' => $sktemplate->msg( 'lakat-views-primary-tooltip' )->text(),
+		];
+
+		
+	}
+
+	// public static function onPersonalUrls( array &$personal_urls, Title $title, SkinTemplate $skin ) {
+	// 	$personal_urls['branch'] = [
+	// 		'text' => 'Change Branch',
+	// 		'href' => 'https://google.com',
+	// 	];
+	// }
+
+
+	// public static function onSkinTemplateNavigation( SkinTemplate $skinTemplate, array &$links ) {
+	// 	$links['namespaces']['lakat'] = [
+	// 		'class' => false,
+	// 		'text' => 'Lakat',
+	// 		'href' => '/wiki/Lakat:Main_Page',
+	// 	];
+	// 	return true;
+	// }
 
 }

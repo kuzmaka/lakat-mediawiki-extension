@@ -25,11 +25,13 @@
 	},
 	"HookHandlers": {
 		"LakatHooks": {
-			"class": "MediaWiki\\Extension\\Lakat\\Hooks"
+			"class": "MediaWiki\\Extension\\Lakat\\Hooks",
+			"services": []
 		}
 	},
 	"Hooks": {
-		"BeforePageDisplay": "LakatHooks"
+		"BeforePageDisplay": "LakatHooks",
+		"SkinTemplateNavigation::Universal": "LakatHooks"
 	},
 	"MessagesDirs": {
 		"Lakat": [
