@@ -87,8 +87,8 @@ $wgResourceBasePath = $wgScriptPath;
 ## The URL paths to the logo.  Make sure you change this from the default,
 ## or else you'll overwrite your logo when you upgrade!
 $wgLogos = [
-	'1x' => "$wgResourceBasePath/resources/assets/Lakatdummy.svg",
-	'icon' => "$wgResourceBasePath/resources/assets/Lakatdummy.svg",
+	'1x' => "$wgResourceBasePath/resources/assets/Lakat.png",
+	'icon' => "$wgResourceBasePath/resources/assets/Lakat.png",
 ];
 
 ## UPO means: this is also a user preference option
@@ -412,7 +412,8 @@ def main(overwrite = True):
     shutil.copyfile(os.path.join("tests", "dbdumps", "wikiNoContentYet.sql"), os.path.join("manualTest", "wiki.sql"))
 
     # copy the file tests/img/Lakatdummy.svg to the manualTest folder and name it Lakatdummy.svg
-    shutil.copyfile(os.path.join("tests", "img", "Lakatdummy.svg"), os.path.join("manualTest", "Lakatdummy.svg"))
+    logo = "Lakatdummygithub.png"
+    shutil.copyfile(os.path.join("tests", "img", logo), os.path.join("manualTest", logo))
     print('Logo has been copied to manualTest folder.')
 
     # run docker-compose up
@@ -421,8 +422,8 @@ def main(overwrite = True):
     print('docker-compose up --build -d is executed.')
 
     # docker cp the Lakatdummy.svg file to the web1 container
-    os.system("docker cp Lakatdummy.svg web1:/var/www/html/resources/assets/Lakatdummy.svg")
-    os.system("docker cp Lakatdummy.svg web2:/var/www/html/resources/assets/Lakatdummy.svg")
+    os.system("docker cp {logo} web1:/var/www/html/resources/assets/Lakat.png".format(logo=logo))
+    os.system("docker cp {logo} web2:/var/www/html/resources/assets/Lakat.png".format(logo=logo))
 
     # start the browser brave and open localhost:8280
     # webport = os.getenv("WEB_PORT", "8280")
