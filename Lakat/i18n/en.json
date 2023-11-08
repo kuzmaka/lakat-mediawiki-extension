@@ -6,7 +6,7 @@
 	},
 	"lakat-desc": "This is the Lakat extension",
 	"lakat-switchbranch": "Switch Branch",
-    "lakat-switchbranch-tooltip": "Switch to a different branch",
+	"lakat-switchbranch-tooltip": "Switch to a different branch",
 	"lakat-review": "Review",
 	"lakat-review-tooltip": "Review the current page",
 	"lakat-diffs": "Diffs",
@@ -18,5 +18,11 @@
 	"lakat-token": "Token",
 	"lakat-token-tooltip": "Enter your token",
 	"lakat-social": "Social",
-	"lakat-social-tooltip": "Share the current page"
+	"lakat-social-tooltip": "Share the current page",
+	"createbranch": "Create Branch",
+	"createbranch-name": "Branch name",
+	"createbranch-token": "Token",
+	"createbranch-type-proper": "Proper branch",
+	"createbranch-type-twig": "Twig",
+	"createbranch-allow-conflicts": "Allow conflicts"
 }
