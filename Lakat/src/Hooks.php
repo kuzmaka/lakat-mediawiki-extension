@@ -19,6 +19,7 @@
 
 namespace MediaWiki\Extension\Lakat;
 
+use MediaWiki\Title\Title;
 use SkinTemplate;
 
 class Hooks implements 
@@ -102,7 +103,7 @@ class Hooks implements
 			'createbranch' => [
 				'class' => false,
 				'text' => $sktemplate->msg( 'lakat-create-branch' )->text(),
-				'href' => 'https://another-example.com',
+				'href' => Title::newFromText('Special:CreateBranch')->getLinkURL(),
 				'title' => $sktemplate->msg( 'lakat-create-branch-tooltip' )->text(),
 			],
 			'branchconfig' => [
