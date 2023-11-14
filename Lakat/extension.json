@@ -33,6 +33,12 @@
 		"BeforePageDisplay": "LakatHooks",
 		"SkinTemplateNavigation::Universal": "LakatHooks"
 	},
+	"SpecialPages": {
+		"CreateBranch": "MediaWiki\\Extension\\Lakat\\SpecialCreateBranch"
+	},
+	"ExtensionMessagesFiles": {
+		"LakatAlias": "i18n/Lakat.alias.php"
+	},
 	"MessagesDirs": {
 		"Lakat": [
 			"i18n"
