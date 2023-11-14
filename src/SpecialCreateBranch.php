@@ -2,8 +2,8 @@
 
 namespace MediaWiki\Extension\Lakat;
 
-// use MediaWiki\SpecialPage\FormSpecialPage;   // this is for newer mediawiki
 use FormSpecialPage;
+use Title;
 
 class SpecialCreateBranch extends FormSpecialPage
 {
@@ -16,8 +16,7 @@ class SpecialCreateBranch extends FormSpecialPage
 		return 'ooui';
 	}
 
-	protected function getFormFields()
-	{
+	protected function getFormFields() {
 		$formDescriptor = [
 			'BranchName' => [
 				'type' => 'text',
@@ -46,8 +45,24 @@ class SpecialCreateBranch extends FormSpecialPage
 		return $formDescriptor;
 	}
 
-	public function onSubmit(array $data)
-	{
-		return true;
+	public function onSubmit(array $data) {
+		return $this->redirectToCreatePage($data);
+	}
+
+	public function redirectToCreatePage(array $data) {
+		$pageName = $data[ 'BranchName' ];
+
+		$title = Title::newFromText( $pageName );
+		if ($title->isKnown() || !$title->canExist() ) {
+			return false;
+		}
+
+		$query = [
+			'redlink' => 1,
+			'action' => 'edit',
+		];
+		$target = $title->getLocalUrl( $query );
+
+		$this->getOutput()->redirect( $target, '301' );
 	}
 }
